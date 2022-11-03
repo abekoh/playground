@@ -9,12 +9,18 @@ import (
 // TEST_DRIVERS: sqlite, mysql, postgres, sqlserver
 
 func TestGORM(t *testing.T) {
-	user := User{Name: "jinzhu"}
+	lang := Language{
+		Code: "ja",
+		Name: "Japanese",
+	}
 
-	DB.Create(&user)
+	DB.Create(&lang)
 
-	var result User
-	if err := DB.First(&result, user.ID).Error; err != nil {
+	var cnt int64
+	if err := DB.Model(&Language{Code: "ja"}).Count(&cnt).Error; err != nil {
 		t.Errorf("Failed, got error: %v", err)
+	}
+	if cnt != 1 {
+		t.Error("count must be 1")
 	}
 }
